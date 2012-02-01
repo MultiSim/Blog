@@ -1,4 +1,6 @@
 #!/bin/bash
+git commit -a -m 'update'
+git push
 bundle exec ejekyll
 cd _site
 rm Gem*
