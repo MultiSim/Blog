@@ -1,0 +1,27 @@
+---
+layout: nil
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+ <title>有一说一</title>
+ <link href="http://terro.github.com/atom.xml" rel="self"/>
+ <link href="http://terro.github.com/"/>
+ <updated>{{ site.time | date_to_xmlschema }}</updated>
+ <id>http://terro.github.com/</id>
+ <author>
+   <name>党凡</name>
+   <email>dangf09@gmail.com</email>
+ </author>
+
+ {% for post in site.posts limit:50 %}
+ <entry>
+   <title>{{ post.title }}</title>
+   <link href="http://terro.github.com{{ post.url }}"/>
+   <updated>{{ post.date | date_to_xmlschema }}</updated>
+   <id>http://terro.github.com{{ post.id }}</id>
+   <content type="html">{{ post.content | xml_escape }}</content>
+ </entry>
+ {% endfor %}
+
+</feed>

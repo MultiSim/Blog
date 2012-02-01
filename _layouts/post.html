@@ -1,0 +1,52 @@
+---
+layout: default
+---
+<div class="full">
+  <h1 class="entry-title">
+    <a href="{{ page.url }}" title="{{ page.title }}" rel="bookmark">{{ page.title }}</a>
+  </h1>
+  <div class="entry-content full-content">
+    {{ content }}
+    <div class="clear"></div>
+  </div>
+<!-- AddThis Button BEGIN -->
+<div class="addthis_toolbox addthis_default_style ">
+<a class="addthis_button_preferred_1"></a>
+<a class="addthis_button_preferred_2"></a>
+<a class="addthis_button_preferred_3"></a>
+<a class="addthis_button_preferred_4"></a>
+<a class="addthis_button_compact"></a>
+<a class="addthis_counter addthis_bubble_style"></a>
+</div>
+<!-- AddThis Button END -->
+  <p class="alt-font tight">
+    分类：
+    {% for category in page.categories %}
+    <a href="/categories/{{ category }}" title="{{ category }}" rel="category tag">{{ category }}</a>
+    {% endfor %}
+  </p>
+  <p class="by-line">
+    <span class="date full-date">
+      <abbr class="published" title="{{ page.date }}">{{ page.date | date_to_string }}</abbr>
+    </span>
+  </p>
+  <div class="clear"></div>
+</div>
+<div class="rule">
+  <hr/>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f28f11f3c8ba1c7"></script>
+<script type="text/javascript">
+    var disqus_shortname = 'terro1991';
+    var disqus_url = "http://terro.github.com{{page.url}}";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">评论系统由<span class="logo-disqus">Disqus</span>提供</a>
+
