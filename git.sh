@@ -1,7 +1,7 @@
 #!/bin/bash
 git commit -a -m 'update'
 git push
-bundle exec ejekyll
+bundle exec ejekyll --pygments
 cd _site
 rm Gem*
 git init
