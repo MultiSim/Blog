@@ -33,7 +33,7 @@ message Person {
   required int32 id = 2;
   optional string email = 3;
 
-  enum PhoneType {
+  enum PhoneType {GO
     MOBILE = 0;
     HOME = 1;
     WORK = 2;
@@ -74,5 +74,140 @@ message AddressBook {
 {% highlight html %}
 protoc --python_out=. addressbook.proto
 {% endhighlight %}
+
+这样会在当前目录下生成<code>addressbook\_pb2.py</code>文件。
+
+##Protocol Buffer API
+Python版的编译器并不生成读写数据的代码，而是生成message的描述符，通过Google提供的库来访问。
+
+可以这样使用Protocol Buffer：
+
+{% highlight python %}
+import addressbook_pb2
+person = addressbook_pb2.Person()
+person.id = 1234
+person.name = "John Doe"
+person.email = "jdoe@example.com"
+phone = person.phone.add()
+phone.number = "555-4321"
+phone.type = addressbook_pb2.Person.HOME
+{% endhighlight %}
+
+###枚举类型
+枚举类型的值和<code>.proto</code>文件中指定的值一样。因此，以<code>addressbook_pb2.Person.WORK</code>为例，其值为2。
+
+###Message的一般方法
+- <code>IsInitialized()</code>：检查所有的required字段是否都已赋值
+- <code>CopyFrom(other_msg)</code>：用other_msg替换当前的message
+- <code>Clear()</code>：清空message
+
+更多信息，请参见[Message的API文档](http://code.google.com/intl/zh-CN/apis/protocolbuffers/docs/reference/python/google.protobuf.message.Message-class.html)。
+
+###解析和序列化
+- <code>SerializeToString()</code>：将message序列化，并得到一个字符串。注意，这里的字符串只作为二进制数据的容器。
+- <code>ParseFromString(data)</code>：把字符串解析为message。
+
+最后，以两个例子（写、读message）作为本文的结束：
+
+{% highlight python %}
+#! /usr/bin/python
+
+import addressbook_pb2
+import sys
+
+# This function fills in a Person message based on user input.
+def PromptForAddress(person):
+  person.id = int(raw_input("Enter person ID number: "))
+  person.name = raw_input("Enter name: ")
+
+  email = raw_input("Enter email address (blank for none): ")
+  if email != "":
+    person.email = email
+
+  while True:
+    number = raw_input("Enter a phone number (or leave blank to finish): ")
+    if number == "":
+      break
+
+    phone_number = person.phone.add()
+    phone_number.number = number
+
+    type = raw_input("Is this a mobile, home, or work phone? ")
+    if type == "mobile":
+      phone_number.type = addressbook_pb2.Person.MOBILE
+    elif type == "home":
+      phone_number.type = addressbook_pb2.Person.HOME
+    elif type == "work":
+      phone_number.type = addressbook_pb2.Person.WORK
+    else:
+      print "Unknown phone type; leaving as default value."
+
+# Main procedure:  Reads the entire address book from a file,
+#   adds one person based on user input, then writes it back out to the same
+#   file.
+if len(sys.argv) != 2:
+  print "Usage:", sys.argv[0], "ADDRESS_BOOK_FILE"
+  sys.exit(-1)
+
+address_book = addressbook_pb2.AddressBook()
+
+# Read the existing address book.
+try:
+  f = open(sys.argv[1], "rb")
+  address_book.ParseFromString(f.read())
+  f.close()
+except IOError:
+  print sys.argv[1] + ": Could not open file.  Creating a new one."
+
+# Add an address.
+PromptForAddress(address_book.person.add())
+
+# Write the new address book back to disk.
+f = open(sys.argv[1], "wb")
+f.write(address_book.SerializeToString())
+f.close()
+{% endhighlight %}
+
+{% highlight python %}
+#! /usr/bin/python
+
+import addressbook_pb2
+import sys
+
+# Iterates though all people in the AddressBook and prints info about them.
+def ListPeople(address_book):
+  for person in address_book.person:
+    print "Person ID:", person.id
+    print "  Name:", person.name
+    if person.HasField('email'):
+      print "  E-mail address:", person.email
+
+    for phone_number in person.phone:
+      if phone_number.type == addressbook_pb2.Person.MOBILE:
+        print "  Mobile phone #: ",
+      elif phone_number.type == addressbook_pb2.Person.HOME:
+        print "  Home phone #: ",
+      elif phone_number.type == addressbook_pb2.Person.WORK:
+        print "  Work phone #: ",
+      print phone_number.number
+
+# Main procedure:  Reads the entire address book from a file and prints all
+#   the information inside.
+if len(sys.argv) != 2:
+  print "Usage:", sys.argv[0], "ADDRESS_BOOK_FILE"
+  sys.exit(-1)
+
+address_book = addressbook_pb2.AddressBook()
+
+# Read the existing address book.
+f = open(sys.argv[1], "rb")
+address_book.ParseFromString(f.read())
+f.close()
+
+ListPeople(address_book)
+{% endhighlight %}
+
+##参考文献
+[Protocol Buffer Basics: Python](http://code.google.com/intl/en/apis/protocolbuffers/docs/pythontutorial.html)
 
 [1]: http://code.google.com/intl/en/apis/protocolbuffers/
