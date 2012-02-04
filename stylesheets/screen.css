@@ -1125,3 +1125,7 @@ ul.social li {
   background: none;
   float: left;
 }
+
+#disqus_thread li {
+  background: none;
+}

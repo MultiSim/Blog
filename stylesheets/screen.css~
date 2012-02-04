@@ -482,6 +482,7 @@ h1.page-title {
 
 #navigation a,
 #navigation a:visited {
+	font-size: 110%;
 	font-weight: bold;
 	text-transform: uppercase;
 }
