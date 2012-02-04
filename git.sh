@@ -1,5 +1,6 @@
 #!/bin/bash
-git commit -a -m 'update'
+git add .
+git commit -m 'update'
 git push
 bundle exec ejekyll --pygments
 cd _site
