@@ -1,15 +1,15 @@
 ---
 layout: post
 title: Google Protocol Buffer简介
-Categories:
+categories:
 - 开源
 - Google
 ---
 在阅读Chromium Remoting源代码时，遇到了<code>.proto</code>文件。经过搜索，在Google Code上找到了对这种文件的详细说明：[Protocol Buffer][1]。这里，对这个机制做一简介。本文将以Python语言为例，介绍：
 
 - <code>.proto</code>文件的格式
-- 使用protocol buffer编译器
-- 使用Python语言的protocol buffer API来读写消息
+- 使用Protocol Buffer编译器
+- 使用Python语言的Protocol Buffer API来读写消息
 
 更多内容，请参阅[Protocol Buffer官方网站][1]。
 
@@ -59,5 +59,20 @@ message AddressBook {
 
 每个域必须包含一下修饰符之一：
 
+- <code>required</code>：字段值不能为空，否则会产生异常。
+- <code>optional</code>：字段值如果没有设置，则使用默认值，如果没有指定默认值，则使用系统默认值，例如0，空字符串等。
+- <code>repeated</code>：字段可以重复出现任意自然数次。值的顺序会被保留。
+
+关于<code>.proto</code>文件写法的完整规则，请参见[Protocol Buffer Language Guide](http://code.google.com/intl/zh-CN/apis/protocolbuffers/docs/proto.html)。
+
+##编译Protocol Buffer
+完成<code>.proto</code>文件后，接下来需要生成可以读写<code>AddressBook</code>的类。这一工作通过使用<code>protoc</code>程序完成：
+
+1. 安装编译器。[下载安装包](http://code.google.com/p/protobuf/downloads/)，按照README的提示操作。
+2. 运行编译器：
+
+{% highlight html %}
+protoc --python_out=. addressbook.proto
+{% endhighlight %}
 
 [1]: http://code.google.com/intl/en/apis/protocolbuffers/
