@@ -5,8 +5,8 @@ layout: nil
 <feed xmlns="http://www.w3.org/2005/Atom">
 
  <title>有一说一</title>
- <link href="http://terro.github.com/atom.xml" rel="self"/>
- <link href="http://terro.github.com/"/>
+ <link href="http://dangfan.me/atom.xml" rel="self"/>
+ <link href="http://dangfan.me/"/>
  <updated>{{ site.time | date_to_xmlschema }}</updated>
  <id>http://terro.github.com/</id>
  <author>
@@ -17,7 +17,7 @@ layout: nil
  {% for post in site.posts limit:50 %}
  <entry>
    <title>{{ post.title }}</title>
-   <link href="http://terro.github.com{{ post.url }}"/>
+   <link href="http://dangfan.me{{ post.url }}"/>
    <updated>{{ post.date | date_to_xmlschema }}</updated>
    <id>http://terro.github.com{{ post.id }}</id>
    <content type="html">{{ post.content | xml_escape }}</content>
