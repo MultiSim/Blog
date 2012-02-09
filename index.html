@@ -22,7 +22,7 @@ title: 首页
     </p>
     <p class="by-line">
       <span class="date full-date">
-        <abbr class="published" title="{{ post.date }}">{{ post.date | date_to_string }}</abbr>
+        <abbr class="published" title="{{ post.date }}">{{ post.date | date:"%Y/%m/%d" }}</abbr>
       </span>
     </p>
     <div class="clear"></div>
